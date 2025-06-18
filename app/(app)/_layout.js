@@ -8,12 +8,14 @@ const AppLayout = () => {
         options={{
           title: "map",
         }}
+        screenOptions={{ headerShown: false }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
         }}
+        screenOptions={{ headerShown: false }}
       />
     </Tabs>
   );
