@@ -1,34 +1,19 @@
-import {
-  View,
-  StyleSheet,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-} from "react-native";
-import { Link } from "expo-router";
-import Constants from "expo-constants";
+import { View, StyleSheet, Platform, SafeAreaView } from "react-native";
 
-export default function HomePage() {
+import Constants from "expo-constants";
+import { Redirect } from "expo-router";
+
+const Index = () => {
   return (
     <SafeAreaView>
-      <View style={styles.container}>
-        <Link href="/sign/signIn" style={styles.title}>
-          Bienvenue sur BnBAir !
-        </Link>
+      <View style={styles.globalIndex}>
+        <Redirect href={"/sign/signIn"} />
       </View>
     </SafeAreaView>
   );
-}
+};
+export default Index;
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: Platform.OS === "android" && Constants.statusBarHeight,
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
+  globalIndex: {},
 });

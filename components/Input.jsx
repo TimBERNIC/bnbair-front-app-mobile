@@ -5,13 +5,12 @@ const Input = ({ name, state, setState, type, password }) => {
   return (
     <TextInput
       value={state}
-      onChangeText={(text) => {
-        setState(text);
-      }}
+      onChangeText={setState}
+      autoCapitalize="none"
       placeholder={name}
       style={styles.input}
       keyboardType={type ? type : "default"}
-      secureTextEntry={!!password}
+      secureTextEntry={password}
     />
   );
 };
@@ -22,7 +21,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderStyle: "solid",
     marginHorizontal: 40,
-    height: 50,
+    height: 40,
   },
 });
 

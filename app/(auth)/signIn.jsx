@@ -1,17 +1,47 @@
 import { View, Text, StyleSheet } from "react-native";
-import { Link } from "expo-router";
-import { useState } from "react";
+import { router } from "expo-router";
+import { useState, useContext } from "react";
+import { AuthContext } from "../_layout";
 import WelcomeLogo from "../../components/WelcomeLogo";
 import Input from "../../components/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
-import RegisterButton from "../../components/RegisterButton";
+import axios from "axios";
+import Button from "../../components/Button";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginSucess, setLoginSucess] = useState(false);
   const [loginError, setLoginError] = useState(false);
+
+  const { login, userId, setUserId, userToken, setUserToken } =
+    useContext(AuthContext);
+  console.log(userId);
+  console.log(userToken);
+
+  const loginFunc = async () => {
+    try {
+      const response = await axios.post(
+        "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/log_in",
+        {
+          email: email,
+          password: password,
+        }
+      );
+
+      login();
+      setUserId(response.data.id);
+      setUserToken(response.data.token);
+      setLoginError(false);
+      setLoginSucess(true);
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      console.log(error.response);
+      setLoginSucess(false);
+      setLoginError(true);
+    }
+  };
 
   return (
     <View style={styles.globalView}>
@@ -34,7 +64,8 @@ const SignIn = () => {
           {loginError === true && (
             <Text style={styles.errorBox}>password or account invalid</Text>
           )}
-          <RegisterButton
+          <Button
+            onPressFunc={loginFunc}
             buttonName="Sign in"
             email={email}
             setEmail={setEmail}
@@ -43,9 +74,14 @@ const SignIn = () => {
             setLoginSucess={setLoginSucess}
             setLoginError={setLoginError}
           />
-          <Link href="/sign/signUp" style={styles.linkButton}>
+          <Text
+            href="/signIn"
+            style={styles.linkButton}
+            onPress={() => {
+              router.replace("/signUp");
+            }}>
             No account ? Register
-          </Link>
+          </Text>
         </View>
       </KeyboardAwareScrollView>
     </View>
