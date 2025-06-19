@@ -2,15 +2,7 @@ import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 
 import Entypo from "@expo/vector-icons/Entypo";
 
-const RoomBox = ({
-  pictures,
-  title,
-  price,
-  reviews,
-  ratingValue,
-  avatar,
-  id,
-}) => {
+const RoomBox = ({ pictures, title, price, reviews, ratingValue, avatar }) => {
   const stars = () => {
     const starTab = [];
     for (let i = 0; i < ratingValue; i++) {
