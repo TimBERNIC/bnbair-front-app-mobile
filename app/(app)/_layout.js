@@ -17,6 +17,13 @@ const AppLayout = () => {
         }}
         screenOptions={{ headerShown: false }}
       />
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: "Home",
+        }}
+        screenOptions={{ headerShown: false }}
+      />
     </Tabs>
   );
 };

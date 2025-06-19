@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { Stack, router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const AuthContext = createContext();
 
@@ -9,14 +10,25 @@ const Layout = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   const login = () => {
-    console.log("login OK");
     setIsConnected(true);
   };
 
   const logout = () => {
-    console.log("Login False");
     setIsConnected(false);
   };
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const storedUser = await AsyncStorage.getItem("user");
+      const user = JSON.parse(storedUser);
+      if (user.id && user.token) {
+        login();
+      } else {
+        logout();
+      }
+    };
+    getUserData();
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {

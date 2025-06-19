@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-} from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import { useContext } from "react";
 import { AuthContext } from "../_layout";
 import Constants from "expo-constants";
@@ -28,13 +22,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: Platform.OS === "android" && Constants.statusBarHeight,
     height: "100%",
-  },
-  logoutBtn: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: 50,
-    borderColor: "blue",
-    borderWidth: 2,
-    borderStyle: "solid",
   },
 });

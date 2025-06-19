@@ -7,6 +7,7 @@ import Input from "../../components/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import axios from "axios";
 import Button from "../../components/Button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -16,8 +17,6 @@ const SignIn = () => {
 
   const { login, userId, setUserId, userToken, setUserToken } =
     useContext(AuthContext);
-  console.log(userId);
-  console.log(userToken);
 
   const loginFunc = async () => {
     try {
@@ -29,6 +28,11 @@ const SignIn = () => {
         }
       );
 
+      const user = JSON.stringify({
+        id: response.data.id,
+        token: response.data.token,
+      });
+      await AsyncStorage.setItem("user", user);
       login();
       setUserId(response.data.id);
       setUserToken(response.data.token);

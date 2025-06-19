@@ -1,7 +1,6 @@
 import { View, TextInput, StyleSheet, setMultiLine } from "react-native";
 
 const Input = ({ name, state, setState, type, password }) => {
-  console.log(state?.toString?.());
   return (
     <TextInput
       value={state}

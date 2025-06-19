@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { router } from "expo-router";
 import { useState, useContext } from "react";
@@ -33,8 +33,11 @@ const SignUp = () => {
           }
         );
 
-        console.log(response.data);
-
+        const user = JSON.stringify({
+          id: response.data.id,
+          token: response.data.token,
+        });
+        await AsyncStorage.setItem("user", user);
         login();
         setSuccess(true);
         setEmail("");
