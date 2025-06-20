@@ -1,24 +1,8 @@
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 
-import Entypo from "@expo/vector-icons/Entypo";
+import RatingBox from "./RatingBox";
 
 const RoomBox = ({ pictures, title, price, reviews, ratingValue, avatar }) => {
-  const stars = () => {
-    const starTab = [];
-    for (let i = 0; i < ratingValue; i++) {
-      starTab.push(
-        <Entypo key={"ys" + i} name="star" size={24} color="#FFB100" />
-      );
-    }
-    for (let i = 0; i < 5 - ratingValue; i++) {
-      starTab.push(
-        <Entypo key={"gs" + i} name="star" size={24} color="grey" />
-      );
-    }
-
-    return starTab;
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.boxPicture}>
@@ -31,15 +15,15 @@ const RoomBox = ({ pictures, title, price, reviews, ratingValue, avatar }) => {
             />
           ))}
         </ScrollView>
-        <Text style={styles.roomPrice}>{price} €</Text>
+        <View style={styles.roomPriceBox}>
+          <Text style={styles.roomPrice}>{price} €</Text>
+        </View>
       </View>
       <View style={styles.roomUnderbox}>
         <View style={styles.roomUnderboxDetails}>
           <Text style={styles.roomTitle}>{title}</Text>
-          <View style={styles.ratingBox}>
-            <View style={styles.stars}>{stars()}</View>
-            <Text style={styles.reviewsNb}>{reviews} reviews</Text>
-          </View>
+
+          <RatingBox ratingValue={ratingValue} reviews={reviews} />
         </View>
         <Image style={styles.avatar} source={{ uri: avatar }} />
       </View>
@@ -62,18 +46,21 @@ const styles = StyleSheet.create({
     height: "100%",
     marginRight: 10,
   },
-
-  roomPrice: {
+  roomPriceBox: {
+    justifyContent: "center",
+    alignItems: "center",
     width: 100,
     height: 50,
+    top: 130,
+    left: 0,
+    position: "absolute",
+    backgroundColor: "black",
+  },
+  roomPrice: {
     textAlign: "center",
     textAlignVertical: "center",
     color: "white",
     fontSize: 22,
-    backgroundColor: "black",
-    position: "absolute",
-    top: 130,
-    left: 0,
   },
   roomUnderbox: {
     flexDirection: "row",
@@ -87,7 +74,6 @@ const styles = StyleSheet.create({
   roomUnderboxDetails: {
     justifyContent: "center",
     alignItems: "flex-start",
-
     gap: 10,
     width: 280,
   },
@@ -96,14 +82,5 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 50,
   },
-  ratingBox: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
   roomTitle: { fontSize: 20 },
-
-  reviewsNb: { fontSize: 14, color: "grey" },
-
-  stars: { flexDirection: "row" },
 });

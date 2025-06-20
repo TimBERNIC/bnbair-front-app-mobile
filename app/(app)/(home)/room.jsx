@@ -11,12 +11,15 @@ import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import RoomBox from "../../../components/RoomBox";
+import MapView, { Marker } from "react-native-maps";
 
 const Room = () => {
   const { id } = useLocalSearchParams();
   const [roomData, setRoomData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [boxClosed, setBoxClosed] = useState(true);
+
+  console.log(roomData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,8 +37,6 @@ const Room = () => {
   }, []);
 
   const { photos, title, price, reviews, ratingValue, user } = roomData;
-
-  console.log(Platform.OS);
 
   return isLoading ? (
     <Text>Chargement en cours</Text>
@@ -61,7 +62,28 @@ const Room = () => {
           }}>
           {roomData.description}
         </Text>
-        <View style={styles.mapBox}></View>
+        <View>
+          <MapView
+            style={styles.mapBox}
+            initialRegion={{
+              latitude: roomData.location[1],
+              longitude: roomData.location[0],
+              latitudeDelta: 0.005,
+              longitudeDelta: 0.005,
+            }}
+            showsUserLocation={false}>
+            <Marker
+              Marker
+              key={roomData._id}
+              coordinate={{
+                latitude: roomData.location[1],
+                longitude: roomData.location[0],
+              }}
+              title={roomData.title}
+              description={roomData.description}
+            />
+          </MapView>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -80,10 +102,8 @@ const styles = StyleSheet.create({
     width: 50,
   },
   mapBox: {
-    height: 400,
+    marginTop: 20,
+    height: 300,
     width: 400,
-    borderColor: "blue",
-    borderWidth: 2,
-    borderStyle: "solid",
   },
 });

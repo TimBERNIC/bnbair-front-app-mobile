@@ -5,16 +5,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const AuthContext = createContext();
 
 const Layout = () => {
-  const [userId, setUserId] = useState("");
-  const [userToken, setUserToken] = useState("");
+  const [userId, setUserId] = useState(null);
+  const [userToken, setUserToken] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
 
   const login = () => {
     setIsConnected(true);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await AsyncStorage.removeItem("user");
     setIsConnected(false);
+    router.replace("/signIn");
   };
 
   useEffect(() => {
@@ -22,6 +24,8 @@ const Layout = () => {
       const storedUser = await AsyncStorage.getItem("user");
       const user = JSON.parse(storedUser);
       if (user.id && user.token) {
+        setUserId(user.id);
+        setUserToken(user.token);
         login();
       } else {
         logout();
@@ -31,13 +35,11 @@ const Layout = () => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (isConnected) {
-        router.replace("/home");
-      } else {
-        router.replace("/signIn");
-      }
-    }, 0);
+    if (isConnected) {
+      router.replace("/home");
+    } else if (userId === "" && userToken === "") {
+      router.replace("/signIn");
+    }
   }, [isConnected]);
 
   return (
