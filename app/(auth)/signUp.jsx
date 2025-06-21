@@ -19,9 +19,7 @@ const SignUp = () => {
   const [logError, setLogError] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const { login } = useContext(AuthContext);
-
-  console.log(email, username, description, password);
+  const { login, setUserId, setUserToken } = useContext(AuthContext);
 
   const register = async () => {
     if (password === confirmPassword && password.length > 7) {
@@ -46,13 +44,11 @@ const SignUp = () => {
           token: response.data.token,
         });
         await AsyncStorage.setItem("user", user);
+
         login();
+        setUserId(response.data.id);
+        setUserToken(response.data.token);
         setSuccess(true);
-        setEmail("");
-        setUsername("");
-        setPassword("");
-        setConfirmPassword("");
-        setDescription("");
         setError(false);
         setLogError(false);
       } catch (error) {

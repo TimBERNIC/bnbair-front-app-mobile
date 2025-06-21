@@ -9,6 +9,7 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../_layout";
 import Constants from "expo-constants";
@@ -22,14 +23,12 @@ import axios from "axios";
 
 const Profile = () => {
   const { logout, userId, userToken } = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState();
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [description, setDescription] = useState("");
-  const [picture, setPicture] = useState(null);
-
-  console.log(data);
+  const [picture, setPicture] = useState("");
 
   useEffect(() => {
     if (userId) {
@@ -52,7 +51,7 @@ const Profile = () => {
           setUserName(response.data.username);
           setIsLoading(false);
         } catch (error) {
-          console.log(error.response);
+          console.log("error", error);
         }
       };
       fetchData();
@@ -60,6 +59,26 @@ const Profile = () => {
       alert("Pas d'utilisateur identifié");
     }
   }, []);
+  const updateUserData = async () => {
+    try {
+      const response = await axios.put(
+        "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/update",
+        {
+          email: email,
+          description: description,
+          username: userName,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
 
   const updateUserAvatarPicture = async () => {
     if (!picture) {
@@ -128,79 +147,58 @@ const Profile = () => {
     console.log(picture);
   };
 
-  const updateUserData = async () => {
-    try {
-      const response = await axios.put(
-        "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/update",
-        {
-          email: email,
-          description: description,
-          username: userName,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        }
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-
   return isLoading ? (
     <Text style={styles.loadingStyle}>Chargement en cours... </Text>
   ) : (
-    <SafeAreaView>
-      <View style={styles.header}>
-        <Image
-          source={require("../../assets/logo.png")}
-          style={styles.logo}></Image>
-      </View>
-      <View style={styles.globalProfile}>
-        <View style={styles.globalAvatarBox}>
-          <View style={styles.avatarBox}>
-            {picture ? (
-              <Image source={{ uri: picture }} style={styles.avatar} />
-            ) : (
-              <FontAwesome6 name="user-large" size={85} color="#E7E7E7" />
-            )}
-          </View>
-          <View style={styles.avatarBtnBox}>
-            <TouchableOpacity onPress={getPermissionAndGetPicture}>
-              <Entypo name="images" size={30} color="grey" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={getPermissionAndTakePicture}>
-              <FontAwesome name="camera" size={30} color="grey" />
-            </TouchableOpacity>
-          </View>
+    <KeyboardAwareScrollView contentContainerStyle={styles.scrollViewStyle}>
+      <SafeAreaView>
+        <View style={styles.header}>
+          <Image
+            source={require("../../assets/logo.png")}
+            style={styles.logo}></Image>
         </View>
+        <View style={styles.globalProfile}>
+          <View style={styles.globalAvatarBox}>
+            <View style={styles.avatarBox}>
+              {picture ? (
+                <Image source={{ uri: picture }} style={styles.avatar} />
+              ) : (
+                <FontAwesome6 name="user-large" size={85} color="#E7E7E7" />
+              )}
+            </View>
+            <View style={styles.avatarBtnBox}>
+              <TouchableOpacity onPress={getPermissionAndGetPicture}>
+                <Entypo name="images" size={30} color="grey" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={getPermissionAndTakePicture}>
+                <FontAwesome name="camera" size={30} color="grey" />
+              </TouchableOpacity>
+            </View>
+          </View>
 
-        <Input setState={setEmail} type="email" name={email} />
+          <Input setState={setEmail} type="email-address" name={email} />
 
-        <Input setState={setUserName} type="text" name={userName}>
-          {userName}
-        </Input>
-        <TextInput
-          style={styles.description}
-          placeholder={description}
-          multiline={true}
-          textAlignVertical="top"
-          onChangeText={(text) => setDescription(text)}
-        />
-        <Button
-          buttonName="Mise à jour"
-          onPressFunc={() => {
-            updateUserData();
-            if (picture) {
-              updateUserAvatarPicture();
-            }
-          }}
-        />
-        <Button buttonName="Déconnection" onPressFunc={logout} />
-      </View>
-    </SafeAreaView>
+          <Input setState={setUserName} name={userName} />
+          <TextInput
+            style={styles.description}
+            placeholder={description}
+            multiline={true}
+            textAlignVertical="top"
+            onChangeText={(text) => setDescription(text)}
+          />
+          <Button
+            buttonName="Mise à jour"
+            onPressFunc={() => {
+              updateUserData();
+              if (picture) {
+                updateUserAvatarPicture();
+              }
+            }}
+          />
+          <Button buttonName="Déconnection" onPressFunc={logout} />
+        </View>
+      </SafeAreaView>
+    </KeyboardAwareScrollView>
   );
 };
 export default Profile;
@@ -260,4 +258,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  scrollViewStyle: { justifyContent: "center", alignItems: "center" },
 });

@@ -8,7 +8,7 @@ const Input = ({ name, state, setState, type, password }) => {
       autoCapitalize="none"
       placeholder={name}
       style={styles.input}
-      keyboardType={type ? type : "default"}
+      keyboardType={type}
       secureTextEntry={password}
     />
   );
