@@ -18,8 +18,6 @@ const Map = () => {
   const [error, setError] = useState(false);
   const [markers, setMarkers] = useState([]);
 
-  console.log(markers);
-
   useEffect(() => {
     const askPermissionAndKeepLocation = async () => {
       try {
@@ -57,7 +55,6 @@ const Map = () => {
           }
         );
 
-        console.log(response.data);
         setMarkers(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -100,7 +97,6 @@ const Map = () => {
           }}
           showsUserLocation={true}>
           {markers.map((element) => {
-            console.log(element.location[0]);
             return (
               <Marker
                 key={element._id}

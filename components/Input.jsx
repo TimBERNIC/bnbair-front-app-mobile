@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     marginHorizontal: 40,
     height: 40,
+    width: 350,
   },
 });
 

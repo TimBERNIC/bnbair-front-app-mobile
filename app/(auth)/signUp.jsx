@@ -7,6 +7,7 @@ import WelcomeLogo from "../../components/WelcomeLogo";
 import Input from "../../components/Input";
 import axios from "axios";
 import Button from "../../components/Button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -20,6 +21,8 @@ const SignUp = () => {
 
   const { login } = useContext(AuthContext);
 
+  console.log(email, username, description, password);
+
   const register = async () => {
     if (password === confirmPassword && password.length > 7) {
       try {
@@ -30,6 +33,11 @@ const SignUp = () => {
             username: username,
             description: description,
             password: password,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
         );
 
@@ -48,7 +56,7 @@ const SignUp = () => {
         setError(false);
         setLogError(false);
       } catch (error) {
-        console.log(error.response);
+        console.log(error.response?.data || error.message);
         setSuccess(false);
         setLogError(true);
         setError(false);

@@ -39,7 +39,7 @@ const Room = () => {
   const { photos, title, price, reviews, ratingValue, user } = roomData;
 
   return isLoading ? (
-    <Text>Chargement en cours</Text>
+    <Text style={styles.loadingStyle}>Chargement en cours</Text>
   ) : (
     <SafeAreaView>
       <View style={styles.globalRoomBox}>
@@ -105,5 +105,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     height: 300,
     width: 400,
+  },
+  loadingStyle: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

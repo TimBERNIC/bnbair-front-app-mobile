@@ -50,7 +50,7 @@ const Home = () => {
   }, []);
 
   return isLoading ? (
-    <Text>Chargement en cours...</Text>
+    <Text style={styles.loadingStyle}>Chargement en cours...</Text>
   ) : (
     <SafeAreaView>
       <View style={styles.globalHome}>
@@ -91,5 +91,10 @@ const styles = StyleSheet.create({
   header: {
     height: 50,
     width: 50,
+  },
+  loadingStyle: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
